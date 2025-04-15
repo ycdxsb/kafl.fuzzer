@@ -14,7 +14,7 @@ The individual traces are saved to $workdir/traces/.
 
 import os
 import sys
-
+import json
 import time
 import glob
 import shutil
@@ -113,7 +113,8 @@ class TraceParser:
 
         plot_file = self.trace_dir + "/coverage.csv"
         edges_file = self.trace_dir + "/edges_uniq.lst"
-
+        edge_timestamp = []
+        edges_file_timestamp = self.trace_dir + "/edges_timestamp.json"
         with open(plot_file, 'w') as f:
             num_bbs = 0
             num_edges = 0
@@ -130,11 +131,13 @@ class TraceParser:
                         unique_edges[edge] += edges[edge]
                     else:
                         unique_edges[edge] = num
-
+                edge_timestamp.append(["%d"%timestamp,gen_edge_info(unique_edges)])
                 num_traces += 1
                 num_bbs += new_bbs
                 num_edges += new_edges
                 f.write("%d;%d;%d\n" % (timestamp, num_bbs, num_edges))
+        with open(edges_file_timestamp,'w') as f:
+            json.dump(edge_timestamp, f, indent=4)
         
         with open(edges_file, 'w') as f:
             for edge,num in unique_edges.items():
@@ -147,7 +150,6 @@ class TraceParser:
         logger.info(" Unique edges written to %s" % edges_file)
 
         return unique_edges, unique_bbs
-
 
 def afl_workdir_iterator(workdir):
     id_to_time = dict()
