@@ -107,13 +107,13 @@ class TraceParser:
 
         return unique_edges, unique_bbs
     
-    def gen_edge_info(unique_edges):
-        s=[]
-        for edge,num in unique_edges.items():
-            s.append("%s,%x\n" % (edge,num))
-        return s
-
     def gen_reports(self):
+        def gen_edge_info(unique_edges):
+            s = ""
+            for edge,num in unique_edges.items():
+                s += "%s,%x\n" % (edge,num)
+            return s
+    
         unique_bbs = set()
         unique_edges = dict()
 
