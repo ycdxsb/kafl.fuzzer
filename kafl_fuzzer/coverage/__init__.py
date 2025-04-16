@@ -106,6 +106,12 @@ class TraceParser:
                 % (unique_traces, len(unique_bbs), len(unique_edges)))
 
         return unique_edges, unique_bbs
+    
+    def gen_edge_info(unique_edges):
+        s=[]
+        for edge,num in unique_edges.items():
+            s.append("%s,%x\n" % (edge,num))
+        return s
 
     def gen_reports(self):
         unique_bbs = set()
