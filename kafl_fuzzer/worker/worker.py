@@ -174,6 +174,8 @@ class WorkerTask:
         retry = 4
         for _ in range(retry):
             payload, is_multi_irp = serialize(tmp_list)
+            if len(payload) > self.payload_limit:
+                payload = payload[:self.payload_limit]
             exec_res = self.__execute(payload)
 
             if not exec_res.is_crash():
